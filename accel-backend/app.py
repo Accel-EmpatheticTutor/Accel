@@ -22,6 +22,7 @@ class Response(Resource):
         # [
         #     {
         #         'message': 'Hello, World!',
+        #         'emotion': [Emotion1, Emotion2, ...] (or empty array if sent by text)
         #         'type': 'user
         #     },
         #     {
@@ -30,6 +31,13 @@ class Response(Resource):
         #     },
         # ]
         # the most recent message is at the end of the list
+
+        # message is in the format:
+        # {
+        #     'message': 'Hello, World!',
+        #     'emotion': [Emotion1, Emotion2, ...] (or empty array if sent by text)
+        #     'type': 'user'
+        # }
         
         if quiz:
             if message:
