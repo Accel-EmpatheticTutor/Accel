@@ -1,11 +1,5 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
-import urllib.request as urllib3
-from bs4 import BeautifulSoup
-import google.generativeai as genai
-from dotenv import load_dotenv 
-import os
-import requests
 
 app = Flask(__name__)
 api = Api(app)
