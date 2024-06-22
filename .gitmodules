@@ -1,0 +1,3 @@
+[submodule "accel-frontend"]
+	path = accel-frontend
+	url = https://github.com/ElemelonWind/accel-frontend.git
