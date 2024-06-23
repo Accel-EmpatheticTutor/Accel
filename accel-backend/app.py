@@ -1,8 +1,14 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
+import QuizUtil, RagUtil
 
 app = Flask(__name__)
 api = Api(app)
+
+CHEMISTRY_KB_ID = "AYP1IY3IUL"
+CONTEXT_NUM = 5
+prevQuestion = ""
+
 
 class Response(Resource):
     def get(self):
@@ -40,19 +46,25 @@ class Response(Resource):
         # }
         
         if quiz:
-            if message:
-                # the user has answered the question, or requested to go back to chat mode
-                pass
-            else:
-                # the user just turned on quiz mode. return a question based on chat history
-                pass
+            if message: # the user has answered the question, or requested to go back to chat mode
+                response = QuizUtil.check_answer(prevQuestion, message)
+
+
+            else: # the user just turned on quiz mode. return a question based on chat history
+                response = QuizUtil.generate_question(history)
+
         else:
             # the user is in chat mode, or requested to go to quiz mode
-            pass
+            response = RagUtil.get_context(message, CHEMISTRY_KB_ID, CONTEXT_NUM)
+
+            #TODO: instead of returning response, send it as context + message to send to model and retrieve response
+
+
+
 
         return {
             'quiz': False, # whether to TOGGLE quiz mode on/off (not the actual value of quiz mode)
-            'message': 'Hello, World!', # the message to display to the user (can be empty if quiz is True) also please try to make it markdown formatted
+            'message': response, # the message to display to the user (can be empty if quiz is True) also please try to make it markdown formatted
         }
 
 if __name__ == '__main__':

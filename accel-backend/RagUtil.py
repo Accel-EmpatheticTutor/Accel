@@ -24,6 +24,30 @@ def retrieve(queryInput, kbId, numberOfResults):
         },
     )
 
-def get_context(query, numberOfResults):
-    response = retrieve(query, "AYP1IY3IUL", numberOfResults)
-    return response['retrievalResults']
+def retrieveAndGenerate(query, kbId):
+    return bedrock_agent_runtime.retrieve_and_generate(
+        input={
+            'text': query
+        },
+        retrieveAndGenerateConfiguration={
+            'type': 'KNOWLEDGE_BASE',
+            'knowledgeBaseConfiguration': {
+                'knowledgeBaseId': kbId,
+                'modelArn': 'arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-instant-v1'
+                }
+            }
+        )
+
+
+
+def get_context(query, kbId, numberOfResults):
+    #TODO: toggle this on when sending to our custom model
+    #response = retrieve(query, kbId, numberOfResults)
+    #return response['retrievalResults']
+
+
+    response = retrieveAndGenerate(query, kbId)["output"]["text"]
+    return response
+
+
+print(get_context("how much is a flux 300", "AYP1IY3IUL", 10))

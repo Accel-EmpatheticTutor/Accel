@@ -1,0 +1,8 @@
+boto3
+langchain
+python-dotenv
+langchain_community
+langchain_openai
+langchainhub
+flask
+flask-restful
