@@ -95,6 +95,8 @@ class Response2(Resource):
         message = args['message']
         quiz = args['quiz']
         history = args['history']
+        previousQuestion = ""
+        userCorrect = 2
         
         # history will now be in the format:
         # [
@@ -114,21 +116,29 @@ class Response2(Resource):
         if quiz:
             if message:
                 # grade user's answer based on previous question (history[-2])
+                generatedFeedback = QuizUtil.check_answer(previousQuestion, message)
+                if("True" in generatedFeedback):
+                    userCorrect = 1
+                else:
+                    userCorrect = 2
                 return {
-                    'highlight': 1, # 1 if correct, 2 if wrong
-                    'message': "FEEDBACK"
+                    'highlight': userCorrect, # 1 if correct, 2 if wrong
+                    'message': generatedFeedback
                 }
             else:
                 # generate a new question
+                generatedQuestion = QuizUtil.generate_question(history)
+                previousQuestion = generatedQuestion
                 return {
                     'highlight': 0,
-                    'message': "QUESTION"
+                    'message': generatedQuestion
                 }
         else:
             # generate a response
+            response = RagUtil.get_context(message, CHEMISTRY_KB_ID, CONTEXT_NUM)
             return {
                 'highlight': 0,
-                'message': "RESPONSE"
+                'message': response
             }
 
 api.add_resource(Response, '/response')

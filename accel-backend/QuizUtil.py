@@ -85,7 +85,7 @@ def check_answer(originalQuestion, userAnswer):
     return res.choices[0].message.content
 
 
-# print(predictQuiz("can you quiz me?"))
+print(predictQuiz("can you quiz me?"))
 
 
 
