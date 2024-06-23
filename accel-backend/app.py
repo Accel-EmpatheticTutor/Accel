@@ -23,6 +23,8 @@ class Response(Resource):
         message = args['message']
         quiz = args['quiz']
         history = args['history']
+        turnQuizOn = False
+        justEnabledQuiz = False
 
         # history is in the format:
         # [
@@ -44,18 +46,27 @@ class Response(Resource):
         #     'emotion': [[Emotion1, Percentage1], [Emotion2, Percentage2], ...] (or empty array if sent by text)
         #     'type': 'user'
         # }
+        print(message)
         didEnableQuiz = QuizUtil.predictQuiz(message)
-        quiz = didEnableQuiz.contains("True")
+        print("didEnableQuiz", didEnableQuiz, type(didEnableQuiz))
+        if ("True" in didEnableQuiz):
+            turnQuizOn = True
+            justEnabledQuiz = True
+        else:
+            turnQuizOn = False
         
-        if quiz:
-            if message: # the user has answered the question, or requested to go back to chat mode
+        if turnQuizOn:
+            print("1")
+            if not justEnabledQuiz: # the user has answered the question, or requested to go back to chat mode
                 response = QuizUtil.check_answer(prevQuestion, message)
+                justEnabledQuiz = False
 
 
             else: # the user just turned on quiz mode. return a question based on chat history
                 response = QuizUtil.generate_question(history)
 
         else:
+            print("2")
 
             # the user is in chat mode, or requested to go to quiz mode
             response = RagUtil.get_context(message, CHEMISTRY_KB_ID, CONTEXT_NUM)
@@ -64,9 +75,10 @@ class Response(Resource):
 
 
 
-
+        # print("got to return")
+        # print(response)
         return {
-            'quiz': False, # whether to TOGGLE quiz mode on/off (not the actual value of quiz mode)
+            'quiz': turnQuizOn, # whether to TOGGLE quiz mode on/off (not the actual value of quiz mode)
             'message': response, # the message to display to the user (can be empty if quiz is True) also please try to make it markdown formatted
         }
 

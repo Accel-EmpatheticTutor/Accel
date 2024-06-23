@@ -29,18 +29,20 @@ def predictQuiz(query):
         {
             "role": "user",
             "content": (
-                    "Evaluate if the user wants you to quiz them. Respond with only 1 word, true or false"
+                    "Evaluate if the user wants you to quiz them. Respond with only 1 word, true or false. Here is the user's most recent message: " + query
             ),
         },
     ]
 
-    return access_llm(messages).choices[0].message.content
+    evaluation = (access_llm(messages))
+    res = evaluation.choices[0].message.content
+    return res
 def generate_question(history):
     stringHistory = ""
     count = 0
     for message in history:
         count += 1
-        stringHistory += ("Message" + count + ": " + message['message'] + ".")
+        stringHistory += ("Message" + str(count) + ": " + message['message'] + ".")
 
     messages = [
         {
@@ -58,7 +60,8 @@ def generate_question(history):
         },
     ]
 
-    return access_llm(messages)
+    res =  access_llm(messages)
+    return res.choices[0].message.content
 
 
 def check_answer(originalQuestion, userAnswer):
@@ -78,9 +81,11 @@ def check_answer(originalQuestion, userAnswer):
         },
     ]
 
-    return access_llm(messages)
+    res = access_llm(messages)
+    return res.choices[0].message.content
 
-print(predictQuiz("can you quiz me?"))
+
+# print(predictQuiz("can you quiz me?"))
 
 
 
