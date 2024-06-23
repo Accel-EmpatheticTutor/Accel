@@ -44,6 +44,8 @@ class Response(Resource):
         #     'emotion': [[Emotion1, Percentage1], [Emotion2, Percentage2], ...] (or empty array if sent by text)
         #     'type': 'user'
         # }
+        didEnableQuiz = QuizUtil.predictQuiz(message)
+        quiz = didEnableQuiz.contains("True")
         
         if quiz:
             if message: # the user has answered the question, or requested to go back to chat mode
@@ -54,6 +56,7 @@ class Response(Resource):
                 response = QuizUtil.generate_question(history)
 
         else:
+
             # the user is in chat mode, or requested to go to quiz mode
             response = RagUtil.get_context(message, CHEMISTRY_KB_ID, CONTEXT_NUM)
 

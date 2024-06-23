@@ -17,8 +17,31 @@ def access_llm(query):
 
     return response
 
+def predictQuiz(query):
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are an artificial intelligence assistant and you need to "
+                "engage in a helpful, detailed, polite conversation with a user. Your primary job will be to decide if the user is trying to get you to quiz them."
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                    "Decide if the user is attempting to get you to quiz them. Respond with only 1 word, true or false"
+            ),
+        },
+    ]
 
-def generate_question(userQuery):
+    return access_llm(messages)
+def generate_question(history):
+    stringHistory = ""
+    count = 0
+    for message in history:
+        count += 1
+        stringHistory += ("Message" + count + ": " + message['message'] + ".")
+
     messages = [
         {
             "role": "system",
@@ -30,7 +53,7 @@ def generate_question(userQuery):
         {
             "role": "user",
             "content": (
-                    "Generate a quiz question based on the idea of: " + userQuery
+                    "Generate a quiz question to quiz the user based on recent conversation messages. Here is the conversation, with the earliest message listed as message 1, and the most recent message as the highest number: " + stringHistory
             ),
         },
     ]
@@ -57,7 +80,7 @@ def check_answer(originalQuestion, userAnswer):
 
     return access_llm(messages)
 
-
+# print(predictQuiz("can you quiz me?"))
 
 
 
