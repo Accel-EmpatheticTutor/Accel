@@ -78,11 +78,61 @@ class Response(Resource):
         # print("got to return")
         # print(response)
         return {
-            'quiz': turnQuizOn, # whether to TOGGLE quiz mode on/off (not the actual value of quiz mode)
+            'highlight': -1, # 0 if no highlight, 1 for green, 2 for red.
             'message': response, # the message to display to the user (can be empty if quiz is True) also please try to make it markdown formatted
         }
+    
+class Response2(Resource):
+    def get(self):
+        return {'message': 'Hello, World!'}
+    
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('message', type=str)
+        parser.add_argument('history', type=list, location='json', required=True)
+        parser.add_argument('quiz', type=bool, required=True)
+        args = parser.parse_args()
+        message = args['message']
+        quiz = args['quiz']
+        history = args['history']
+        
+        # history will now be in the format:
+        # [
+        #     {
+        #         'message': 'Hello, World!',
+        #         'emotion': [[Emotion1, Percentage1], [Emotion2, Percentage2], ...] (or empty array if sent by text)
+        #         'type': 'user,
+        #         'highlight': 0, (0 if no highlight, 1 for green, 2 for red)
+        #     },
+        #     {
+        #         'message': 'What is your name?',
+        #         'type': 'model'
+        #     },  'quiz': False (determines if bot message is fancy-styled or not)
+        #     },
+        # ]
+
+        if quiz:
+            if message:
+                # grade user's answer based on previous question (history[-2])
+                return {
+                    'highlight': 1, # 1 if correct, 2 if wrong
+                    'message': "FEEDBACK"
+                }
+            else:
+                # generate a new question
+                return {
+                    'highlight': 0,
+                    'message': "QUESTION"
+                }
+        else:
+            # generate a response
+            return {
+                'highlight': 0,
+                'message': "RESPONSE"
+            }
 
 api.add_resource(Response, '/response')
+api.add_resource(Response2, '/response2')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5001")
