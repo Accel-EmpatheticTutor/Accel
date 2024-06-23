@@ -114,7 +114,9 @@ class Response2(Resource):
         # ]
 
         if quiz:
+            print("quiz i")
             if message:
+                print("message")
                 # grade user's answer based on previous question (history[-2])
                 generatedFeedback = QuizUtil.check_answer(previousQuestion, message)
                 if("True" in generatedFeedback):
@@ -126,6 +128,7 @@ class Response2(Resource):
                     'message': generatedFeedback
                 }
             else:
+                print("gen question")
                 # generate a new question
                 generatedQuestion = QuizUtil.generate_question(history)
                 previousQuestion = generatedQuestion
@@ -134,6 +137,7 @@ class Response2(Resource):
                     'message': generatedQuestion
                 }
         else:
+            print("respond")
             # generate a response
             response = RagUtil.get_context(message, CHEMISTRY_KB_ID, CONTEXT_NUM)
             return {

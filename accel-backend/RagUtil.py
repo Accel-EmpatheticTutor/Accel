@@ -25,6 +25,7 @@ def retrieve(queryInput, kbId, numberOfResults):
     )
 
 def retrieveAndGenerate(query, kbId):
+    print("calling ret and gen with query: ", query)
     return bedrock_agent_runtime.retrieve_and_generate(
         input={
             'text': query
