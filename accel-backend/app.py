@@ -67,5 +67,7 @@ class Response(Resource):
             'message': response, # the message to display to the user (can be empty if quiz is True) also please try to make it markdown formatted
         }
 
+api.add_resource(Response, '/response')
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5001")
