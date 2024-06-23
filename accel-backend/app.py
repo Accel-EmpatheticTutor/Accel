@@ -28,7 +28,7 @@ class Response(Resource):
         # [
         #     {
         #         'message': 'Hello, World!',
-        #         'emotion': [Emotion1, Emotion2, ...] (or empty array if sent by text)
+        #         'emotion': [[Emotion1, Percentage1], [Emotion2, Percentage2], ...] (or empty array if sent by text)
         #         'type': 'user
         #     },
         #     {
@@ -41,7 +41,7 @@ class Response(Resource):
         # message is in the format:
         # {
         #     'message': 'Hello, World!',
-        #     'emotion': [Emotion1, Emotion2, ...] (or empty array if sent by text)
+        #     'emotion': [[Emotion1, Percentage1], [Emotion2, Percentage2], ...] (or empty array if sent by text)
         #     'type': 'user'
         # }
         
