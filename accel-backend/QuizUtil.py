@@ -23,18 +23,18 @@ def predictQuiz(query):
             "role": "system",
             "content": (
                 "You are an artificial intelligence assistant and you need to "
-                "engage in a helpful, detailed, polite conversation with a user. Your primary job will be to decide if the user is trying to get you to quiz them."
+                "engage in a helpful, detailed, polite conversation with a user. Your primary job will be to decide if the user is trying to get you to quiz them. Examples of a user wanting to switch to quiz mode would be \"can you quiz me?\", \"quiz me?\", \"please quiz me\", \"test me\"."
             ),
         },
         {
             "role": "user",
             "content": (
-                    "Decide if the user is attempting to get you to quiz them. Respond with only 1 word, true or false"
+                    "Evaluate if the user wants you to quiz them. Respond with only 1 word, true or false"
             ),
         },
     ]
 
-    return access_llm(messages)
+    return access_llm(messages).choices[0].message.content
 def generate_question(history):
     stringHistory = ""
     count = 0
@@ -80,7 +80,7 @@ def check_answer(originalQuestion, userAnswer):
 
     return access_llm(messages)
 
-# print(predictQuiz("can you quiz me?"))
+print(predictQuiz("can you quiz me?"))
 
 
 
