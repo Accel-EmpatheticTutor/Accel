@@ -10,7 +10,7 @@
   <p align="center">
     Your empathetic chemistry tutor
     <br />
-    <a href=""><strong>Devpost »</strong></a>
+    <a href="https://devpost.com/software/accel-63xgdn"><strong>Devpost »</strong></a>
     <br />
     <br />
     <a href="https://www.linkedin.com/in/alexander-talreja">Alex Talreja</a>
